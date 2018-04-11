@@ -1,10 +1,30 @@
 import React from 'react';
+import {connect} from 'react-redux';
+
+// [mapStateToProps(state, [ownProps]): stateProps]               (Function)
+
+/**
+ *
+ * If this argument is specified, the new component will subscribe to Redux store updates
+ * This means that any time the store is updated, mapStateToProps will be called
+
+---
+*/
+// [mapDispatchToProps(dispatch, [ownProps]): dispatchProps]      (Object or Function)
+
+// [mergeProps(stateProps, dispatchProps, ownProps): props]       (Function)
+
+// export default connect(state => state)(TodoApp)
 
 const PostContainer = ({ parentfilteringlogic, parentaddChildContainer, parentsetState, children }) => {
 
       let _delete = _=>_;
       let addChildContainer = _=>_;
       let filteringlogic = _=>_;
+
+      const childServices =_ => ({
+
+      })
 
       return (
         <React.Fragment>
@@ -48,5 +68,12 @@ const PostContainer = ({ parentfilteringlogic, parentaddChildContainer, parentse
         </React.Fragment>
   )
 };
+
+
+const mapStateToProps = (state, ownProps) => {
+  return { todos: state.todos }
+}
+
+const PostContainer = connect(mapStateToProps)( PostContainer  ) ;
 
 export default PostContainer ;
