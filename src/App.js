@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
 
+import PostContainer from './PostContainer.js' ;
+
 class App extends Component {
   render() {
     return (
-      'hi'
+      <PostView>
+        <PostContainer>
+          { children && children }
+        </PostContainer>
+      </PostView>
     );
   }
 }
