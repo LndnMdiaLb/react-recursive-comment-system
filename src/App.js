@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import PostContainer from './PostContainer.js' ;
+import PostConected from './PostContainer.js' ;
 
 class App extends Component {
   render() {
     return (
       <PostView>
-        <PostContainer>
+        <PostConected id={'hlkjhljkh'}>
           { children && children }
-        </PostContainer>
+        </PostConected>
       </PostView>
     );
   }
