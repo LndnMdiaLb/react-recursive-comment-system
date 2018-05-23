@@ -1,18 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import PostConected from './PostContainer.js' ;
+import Threads from './Threads' ;
 
 class App extends Component {
-  render() {
-    return (
-      <PostView>
-        <PostConected id={'hlkjhljkh'}>
-          { children && children }
-        </PostConected>
-      </PostView>
-    );
-  }
+  render() { return ( <Threads /> ); }
 }
 
 export default App;
