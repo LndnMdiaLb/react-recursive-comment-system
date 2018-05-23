@@ -1,128 +1,67 @@
-import {} from './actions';
+import { statetree } from './statetree';
+import {
+    USER_LOGIN, CREATE_POST, CANCEL_POST, UPDATE_POST, DELETE_POST, VOTE_POST,
+    // userLoginAction, linkPostAction, editPostAction, deleteAction, voteAction
+} from './actions' ;
 
-const reducer = (state = {}, action) => {
+// userLoginAction
+const userLogin = timestamp => { timestamp } ;
+
+export const reducer = (state = statetree, action) => {
+    const {
+            user,
+            id, parent, author,
+            title, body, timestamp, editnumber,
+            voteScore
+            } = action ;
 
     switch (action.type) {
 
-        case EDIT_POST :
-                // assumes post already exists .  Merges differently than CREATE_POST
-            return {
-                editnumber: numbr++ ,
-                title: 'Learn Redux in 10 minutes!',
-                body: 'Just kidding. It takes more than 10 minutes to learn technology.',
-                author: 'thingone',
-            } ;
+        case USER_LOGIN :
+            return Object.assign ( {} , state , { user } ) ;
 
-        case ADD_POST :
-            // assumes post already exists .
-            return {
-                children: [
-                    ...existingIDs ,
-                    ...arrayofIDs
-                ]
-            } ;
+        case CREATE_POST :
+            return { ...state,
+                    posts:{
+                    ...state.posts,
+                        [id]: {
+                            id, parent,
+                            author, timestamp, deleted:false, editnumber:0
+                    }}}
+
+        case CANCEL_POST :
+            const newState= Object.assign ( {} , state) ;
+            delete newState.posts[id] ;
+            return newState ;
+
+        case UPDATE_POST :
+            return { ...state ,
+                posts: {
+                ...state.posts ,
+                [id]: {
+                    ...state.posts[id],
+                    title, body, timestamp,
+                    editnumber:state.posts[id].editnumber+1
+                } }}  ;
 
         case DELETE_POST :
-            return {
-                deleted: true,
-            } ;
+            return { ...state ,
+                posts: {
+                ...state.posts ,
+                [id]: {
+                    ...state.posts[id],
+                    deleted:!state.posts[id].deleted
+                } }}  ;
+
+        case VOTE_POST :
+            return { ...state ,
+                     posts: {
+                     ...state.posts ,
+                        [id]: {
+                            ...state.posts[id],
+                            voteScore
+                        } }}  ;
 
         default: return state ;
     }
-}
-
-const compositeReducer = (state = {}, action) => {
-    // const { posts } = state ;
-    const { parentId, uid, date } = action ;
-    switch (action.type) {
-        case ADD_POST :
-            return {
-                posts: {
-                    ...state.posts,
-                    // creates the uids, links, adds timestamp
-                    [uid]: {
-                        id: uid,
-                        parent:parentId , timestamp:date ,
-                        editnumber : 0 ,
-                        children: []
-                    }
-                }
-            } ;
-
-        case EDIT_POST :
-        case CREATE_POST :
-        case DELETE_POST :
-            return {
-                posts:{
-                    ...state.posts ,
-                    [uid]: {
-                        deleted: true
-                    }
-
-                }
-            }
-        ;
-
-        case CLEAN_POSTS :
-            return {
-                posts:{
-                    // Object.keys(state.posts).map(id => !state.posts.id.deleted )
-                    ...state.posts ,
-                    deleted: true
-                }
-            }
-        ;
-    }
-}
-
-const timeStampCreator = timestamp => { timestamp } ;
-const parentUidMerger = ({id}) => { parent:id } ;
-
-
-const childrenIDMerger = (existingIDs, arrayofIDs) => [
-        ...existingIDs ,
-        ...arrayofIDs
-    ];
-
-
-/*
- stateTree design
-*/
-
-const stateTree = {
-    categories:[
-         {
-            name: 'react',
-            path: 'react'
-        },
-        {
-            name: 'redux',
-            path: 'redux'
-        },
-        {
-            name: 'udacity',
-            path: 'udacity'
-        }
-    ] ,
-    posts:
-        {
-            "6ni6ok3ym7mf1p33lnez": {
-                id: '6ni6ok3ym7mf1p33lnez' ,
-                timestamp: 1468479767190 ,
-                parent: '6ni6ok3ym7mfxxxxxxx3lnez',
-                children:[ '6ni6ok3ym7mfxxxxxxx3lnez', '6ni6ok3ym7mfxxxxxxx3lnez', '6ni6ok3ym7mfxxxxxxx3lnez'],
-
-                deleted: false,
-                editnumber: 2 ,
-
-                title: 'Learn Redux in 10 minutes!',
-                body: 'Just kidding. It takes more than 10 minutes to learn technology.',
-                author: 'thingone',
-
-                voteScore: -5,
-
-                category: 'redux', // necessary ?
-            }
-        },
-    sorting:[]
 }
