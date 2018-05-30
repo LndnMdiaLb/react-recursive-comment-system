@@ -49,7 +49,7 @@ class Container extends React.Component {
     cancelPost= callback => {
         const { id, dispatch, cancelInParent }= this.props;
 
-        // interact with store
+        // interact with store via parent container callback
         cancelInParent && cancelInParent(_=>dispatch(cancelPostAction(id)))
 
         this.setState((prevState, props) => ({
