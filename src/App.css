@@ -77,7 +77,7 @@ textarea, input, h1, h4, h5, p {
 
 .info {
     font-size: .8rem;
-    padding: 0rem .4rem .4rem;
+    padding: 1rem .4rem 1rem;
 }
 .author .info b{
     color: orange;
@@ -94,7 +94,13 @@ textarea, input, h1, h4, h5, p {
 }
 
 .deleted .body, .deleted .title {
-    background-color: black;
+    background: repeating-linear-gradient(
+        45deg,
+        black,
+        black 20px,
+        yellow 20px,
+        yellow 40px
+        ) ;
 }
 
 textarea{

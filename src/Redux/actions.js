@@ -10,12 +10,12 @@
 const USER_LOGIN = 'USER_LOGIN' ;
 
 // const UPDATE_TIMESTAMP = 'UPDATE_TIMESTAMP' ;
-const CREATE_POST = 'CREATE_POST' ;
-const CANCEL_POST = 'CANCEL_POST' ;
-const UPDATE_POST = 'UPDATE_POST' ;
+const CREATE_POST = 'CREATE_POST' ; // local state (redux)
+const CANCEL_POST = 'CANCEL_POST' ; // local state (redux)
 
-const DELETE_POST = 'DELETE_POST' ;
-const VOTE_POST = 'VOTE_POST' ;
+const UPDATE_POST = 'UPDATE_POST' ; // server update
+const DELETE_POST = 'DELETE_POST' ; // server update
+const VOTE_POST = 'VOTE_POST' ; // server update
 
 // USER_LOGIN
 /* MINIMAL INTENT DESCRIPTION */
@@ -56,7 +56,7 @@ const deleteAction = (id) => ({
     id
 }) ;
 
-// VOTE_POST
+// VOTE_POST  krbhoks9
 /* MINIMAL INTENT DESCRIPTION */
 const voteAction = (id, voteScore) => ({
     type: VOTE_POST ,
