@@ -1,5 +1,12 @@
 /*
-!!!!!!!!!  do not rely on this
+    FUNCTIONS FOR CONVERTING FLAT LOOKUP OBJECT
+    INTO COMPOSITE OBJECT TREE
+*/
+
+
+
+/*
+    do not rely on this
 */
 
 const deepClone = dataObj =>
@@ -7,7 +14,7 @@ const deepClone = dataObj =>
 
 
 /*
-take flat data object and shallow clone
+    take flat data object and shallow clone
 */
 
 const shallowClone = dataObj =>
@@ -18,7 +25,8 @@ const shallowClone = dataObj =>
                return acc }, {} ) ;
 
 /*
-   Rearange into tree structure by assinging Data.obj={} to children Arrays
+   Rearange into tree structure
+   by assinging children {} to parent {} via .children []
 */
 
 const link = ( nodeA, nodeB ) => {
@@ -38,9 +46,11 @@ const link = ( nodeA, nodeB ) => {
                return false
            }   }
 
-// CONVERT 'FLAT' DATA OBJECT TO TREE
+/*
 
-/* in psuedocode the normalised object:
+    CONVERT 'FLAT' DATA OBJECT TO TREE
+
+    in psuedocode the normalised object:
         {   'a':{
                 parent:'a',
                 id:'a',
@@ -59,7 +69,7 @@ in psuedocode turns to :
 */
 
 /*
-Apply shallow clone and run link() on data entries
+    Apply shallow clone and run link() on data entries
 */
 
 const extract = dataObj => {
@@ -82,32 +92,3 @@ const extract = dataObj => {
 
 export const generateTree = (dataObj) => extract(dataObj) ;
 
-
-////////////////////////////////////////////////////////////////////////////////////
-
-
-/*
-    Unique Integer creator
-*/
-
-
-export const uuint= _ => Math.random().toString(36).substr(-8) ;
-
-
-/*
-    Convert TimeStamp into date, day, date number, month, year
-*/
-
-export const convertTimeStamp= timestamp  =>
-        {	const date = new Date( timestamp ) ;
-            return  {   date,
-                        day: [  'Sun' , 'Mon' , 'Tue' ,
-                                'Wed' , 'Thu' , 'Fri' ,
-                                'Sat' ][ date.getDay() ] ,
-                        number: date.getDate().toString() ,
-                        month: [    'Jan' , 'Feb' , 'Mar',
-                                    'Apr' , 'May' , 'Jun' ,
-                                    'Jul' , 'Aug' , 'Sep',
-                                    'Oct' , 'Nov' , 'Dec'  ][ date.getMonth() ] ,
-                        year: date.getFullYear().toString()
-                    } } ;
