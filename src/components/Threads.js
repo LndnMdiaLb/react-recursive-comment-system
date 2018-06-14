@@ -2,46 +2,30 @@ import React from 'react';
 import Container from './Container' ;
 
 import { Provider, Consumer } from './GlobalState' ;
-import { getRemotePosts } from '../utilities/network' ;
+import { getRemoteCategories } from '../utilities/network' ;
+
+import { Button } from './post/Button' ;
 
 /*
     Threads
     receives flat store? data
 */
-export const Thread=({tree})=>{
 
-    const state= {
-            user:'Chris',
-            tree:{} } ,
+export class Thread extends React.Component{
 
-    generateNestedContainers = ({children:childrenObjects, ...props}) =>
-        <Consumer key={props.id} >{
-            state =>
-                <Container { ...{ ...props, ...state } }>
-                    {
-                        /*
-                            the children property refers to a property on the props object ( see: generateTree )
-                            not react component props.children.  The results are nested components
-                            (accesible in Container as regular children)
-                        */
-                        childrenObjects && childrenObjects.map( obj=> generateNestedContainers(obj) ) }
-                </Container> }
-            </Consumer>  ;
+    rootContainer= React.createRef();
 
-    return <Provider value={ { user:state.user } }>
-                {
-                    /*
-                        loop through root parent objects of tree and create
-                        nested Container Components to mirror tree.
-                    */
+    handleValue=e=>{
+        e.preventDefault();
+        this.rootContainer.current.getWrappedInstance().createPost();
+    }
 
-                    Object.entries(tree).map(
-                        ([key, obj]) => generateNestedContainers(obj) )
-                        // .concat(
-                        //     <button onClick={_=>getRemotePosts()}>check</button> )
-                }
-
-                { <button onClick={_=>getRemotePosts()}>check</button> }
-            </Provider>   ;
-
+    render(){
+        const {children:comments, ...props}= this.props ;
+        return (
+            <React.Fragment>
+                <Button onClick={this.handleValue}> new post </Button>
+                <Container ref={this.rootContainer}{ ...{ comments, ...props } } />
+            </React.Fragment> )  ;
+    }
 }
