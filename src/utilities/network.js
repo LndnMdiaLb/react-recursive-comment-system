@@ -9,20 +9,3 @@ export const headers= {
     'Accept': 'application/json',
     'Authorization': token
 } ;
-
-export const getRemotePosts=_=>
-    fetch(`${api}/posts`,
-            {   method: 'GET' ,
-                headers })
-            .then(data=>data.json())
-            .then(  data => ({ data }),
-                    error => ({ error })) ;
-
-
-export const getRemoteCategories=_=>
-    fetch(`${api}/categories`,
-            {   method: 'GET' ,
-                headers })
-            .then(data=>data.json())
-            .then(  data => ({ data }),
-                    error => ({ error })) ;

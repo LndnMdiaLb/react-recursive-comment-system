@@ -31,13 +31,13 @@ const shallowClone = dataObj =>
 
 const link = ( nodeA, nodeB ) => {
    const   { parent }= nodeA , { id }= nodeB ;
-           // if NodeA's parent property == id of NodeB
+           // if NodeA.parent  == NodeB.id
            if ( parent===id ) {
                // add to children array and return true
                ( nodeB.children || ( nodeB.children= []))
                    .push(nodeA) ;
                return true ;   }
-           // if NodeB !== .parent check for children
+           // if NodeB.id !== NodeA.parent check for children
            else if ( nodeB.children ) {
                for( let childNode of nodeB.children)
                    if ( link(nodeA, childNode) ) return true ;
@@ -72,23 +72,19 @@ in psuedocode turns to :
     Apply shallow clone and run link() on data entries
 */
 
-const extract = dataObj => {
-   const tree = shallowClone(dataObj) ;
+export const extract = (dataObj) => {
+   let tree = shallowClone(dataObj) ;
+
    // loop over original dataObj but apply changes to shallowCloned tree
    // every root object/node stored on dataObj is tested and tree obj manipulation does not affect looping
-   Object.keys(dataObj).forEach(id => {
+   Object.keys(dataObj).forEach(id=> {
        let node= tree[id] ;
        // loop over parentNode(candidates)
        for (let [ , parentNode] of Object.entries(tree) )
            // if not the same node
            // && link recursive function returns true (found link)
            // delete tree[id] from root because it has been stored as child somewhere
-           if (node !== parentNode && link(node, parentNode))
-               delete tree[id]
+           if (node !== parentNode && link(node, parentNode)) delete tree[id] ;
        })
    return tree }
-
-
-
-export const generateTree = (dataObj) => extract(dataObj) ;
 
