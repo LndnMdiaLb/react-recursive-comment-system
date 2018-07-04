@@ -1,31 +1,49 @@
 import React from 'react';
 import Container from './Container' ;
 
-import { Provider, Consumer } from './GlobalState' ;
-import { getRemoteCategories } from '../utilities/network' ;
+import { extract } from '../utilities/utilities' ;
 
-import { Button } from './post/Button' ;
+/*
+    the children property refers to a property on the props object ( see: extract )
+    not react component props.children.  The results are nested components
+    (accesible in Container as regular children)
+*/
+
+const composer= Component=> {
+    const nest= ({children, ...props})=>
+            <Component {...{ key:props.id, ...props }}>
+                {   children && children.map( props=> nest(props) ) }
+            </Component> ;
+    return nest ;
+    } ;
 
 /*
     Threads
-    receives flat store? data
+
+    Receives flat store? data
 */
 
 export class Thread extends React.Component{
 
-    rootContainer= React.createRef();
+    constructor(props){ super(props) ;
 
-    handleValue=e=>{
-        e.preventDefault();
-        this.rootContainer.current.getWrappedInstance().createPost();
+        const nested= extract(props.posts) ;
+
+        this.ui_object_tree =  {
+            editnumber:1 ,
+            root:true,
+            children:  Object.entries(nested)
+                            .map(([, comment])=>comment)
+        }   ;
     }
 
-    render(){
-        const {children:comments, ...props}= this.props ;
-        return (
-            <React.Fragment>
-                <Button onClick={this.handleValue}> new post </Button>
-                <Container ref={this.rootContainer}{ ...{ comments, ...props } } />
-            </React.Fragment> )  ;
-    }
+    /*
+
+    */
+
+    render=_=>(
+        <div className='wrapper'>
+            { composer(Container)(this.ui_object_tree) }
+        </div>
+    ) ;
 }

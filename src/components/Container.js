@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Consumer } from './GlobalState' ;
 import { Control } from './Control' ;
+import { Button } from './post/Button' ;
 
 import {
     // USER_LOGIN, CREATE_POST, EDIT_POST, DELETE_POST, VOTE_POST,
@@ -15,23 +15,30 @@ import {
 } from '../redux/asyncActions' ;
 
 import Post from './Post' ;
-
 import { uuint } from '../utilities/math' ;
 
 
 class Container extends React.Component {
 
-
-
-    state= { replying:false } ;
+    state= {} ;
     constructor(props){ super(props) ;
+        // !props.editnumber &&
         /*
             children components are rendered from state instead of props because user needs to be able to modify the list
-            either with via concat() or sort()
+            either via concat() or sort()
         */
-        this.state.comments= this.props.comments || [] ;
+        this.state= {
+            replying:false ,
+            hidden: !props.editnumber , // editnumber == 0 is user created
+            comments: React.Children.map(
+                this.props.children ,
+                child=> {
+                    const { id, voteScore, timestamp }= child.props ;// extract properties used by sorting mechanisms
+                    return { id, voteScore , timestamp , child } }
+                ) || []
+            } ;
+        console.log(this.props.root)
     } ;
-
 
 
 
@@ -48,22 +55,41 @@ class Container extends React.Component {
         dispatch( createPostAction(id, parent, author, timestamp) ) ;
 
         this.setState(prev=> {
-            const commentContainer= {
+
+            const props= {
                         parent, id, author,
                         timestamp, editnumber:0,
+
+                        /*
+                            introduced in Threads to track first post and show title
+                            it takes care of the creation of new posts by user
+                        */
+                        isFirstPost:this.props.root,
                         /*  pass cancelPost to child Container
                             so child Post can affect parent Container   */
                         cancelInParent:this.cancelPost,
-                        replyStatusInParent:this.toggleReplyStatus }
+                        replyStatusInParent:this.toggleReplyStatus } ;
+
+            const newComment= {
+                        id, voteScore:1 , timestamp ,
+                        child: this.generateComment(props) } ;
 
             return {
-                current: id , // used as identifier of comment to remove if cancelled
-                replying:true ,
-                comments: [ commentContainer ].concat( prev.comments ) // concat to front
+                    current: id , // used as identifier of comment to remove if cancelled
+                    replying:true ,
+                    comments: [ newComment ].concat( prev.comments ) // concat to front
                 }}) ;
     }
 
-    toggleReplyStatus=_=> this.setState( prev=>({ replying:!prev.replying })) ;
+
+    /*
+        never used
+    */
+
+
+    toggleReplyStatus=_=> this.setState( prev=> ({ replying:!prev.replying }) ) ;
+
+
 
     // revert
     cancelPost=callback=> {
@@ -75,10 +101,9 @@ class Container extends React.Component {
         this.setState((prevState, props)=> ({
                 current: undefined ,
                 replying: false ,
-                comments: prevState.comments.filter( container=>container.id != prevState.current)
+                comments: prevState.comments.filter( container=> container.id != prevState.current)
             }) , callback ) ;
     }
-
 
 
 
@@ -96,8 +121,6 @@ class Container extends React.Component {
     }
 
 
-
-
     // revert
     deletePost=_=> {
         const { dispatch, id }= this.props ;
@@ -105,18 +128,15 @@ class Container extends React.Component {
     }
 
 
-/**
+    /**
 
-*/
+    */
 
-    generateNestedContainer=({ id, children:comments, ...props })=>
-            <ConnectedContainer { ...{ key:id, id, comments, ...props } } /> ;
+    generateComment=props=> <ConnectedContainer { ...{ key:props.id, ...props } } /> ;
 
+    /**
 
-/**
-
-*/
-
+    */
 
     // Ordering by Date
     orderbyDate=_=>
@@ -135,47 +155,55 @@ class Container extends React.Component {
                     })) ;
 
     //
-    toggleComments=_=>
-        this.setState( prev=>({ hidden:true }) ) ;
+    hideComments=_=> this.setState( prev=>({ hidden:true }) ) ;
 
-/**
+    /**
 
-*/
+    */
 
 
     render=_=> {
 
-        const { comments, hidden  } = this.state ,
-              {  title , body , voteScore,
-                 user, author, id, editnumber, timestamp  }= this.props ;
+        const   {  comments, hidden  } = this.state ,
+                {  replyStatusInParent ,
+                    title , body , voteScore ,
+                    isFirstPost , root ,
+                    user, author, id, editnumber, timestamp  }= this.props ;
 
         return (    <article className='container'>
 
-                        { id &&
+                        { !root &&
                         <Post
-                            { ...{  title , body , voteScore,
+                            { ...{  title, body, voteScore,
+                                    isFirstPost,
                                     user, author, id, editnumber, timestamp  } }
 
-                            isSubComment={ (editnumber==0 || !title) && 'sub' }
+                            isSubComment={ ( editnumber==0 || !title ) && 'sub' }
+
+                            toggleStatus= { replyStatusInParent }
 
                             reply= { this.createPost }
                             cancel= { this.cancelPost }
                             update= { this.updatePost }
                             delete_= { this.deletePost } /> }
 
+                        { root &&
+                        <div className='top-nav'>
+                            <h1>welcome <i>{user}</i></h1>
+                            <Button onClick={ this.createPost }> new post </Button>
+                        </div> }
+
                         <section
                             className={`${hidden && 'hidden'} comments`} >
 
                             { id && !!comments.length &&
                             <Control
-                                control= 'vote'
+                                control={ hidden?'hidden':'vote' }
                                 date= {this.orderbyDate}
                                 vote= {this.orderbyVote}
-                                hidden= { this.toggleComments} /> }
+                                hidden= { this.hideComments} /> }
 
-                            { comments && comments.map(
-                                props=> this.generateNestedContainer(props)) }
-                            {/* { children && children } */}
+                            { comments && comments.map(props=> props.child) }
                         </section>
 
                     </article>
@@ -183,9 +211,8 @@ class Container extends React.Component {
 } ;
 
 const ConnectedContainer = connect(
-    (state) => {
-        return { user: state.currentUser } } ,
-        null, null, { withRef: true })
+    state=>({ user: state.user } ) ,
+    null, null, { withRef: true } )
     (Container);
 
 export default ConnectedContainer;

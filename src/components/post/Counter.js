@@ -32,11 +32,16 @@ class Counter extends React.Component {
 
         const type = value<initVoteScore? 'downVote' : 'upVote' ;
 
-        // because we want to limit upvotes to -1 / +1 per 'session' we handle votescore internally and don't register connect for updates
+        /*
+            because we want to limit upvotes
+            to -1 / +1 per 'session' we handle votescore
+            internally and don't register connect for updates
+        */
+
         this.setState(
             { voteScore:value } ,
                 _=> dispatch(voteRemotePostAction(id, type))
-                    .then( _=> dispatch( voteAction(id, value) )) )
+                        .then( _=> dispatch( voteAction(id, value) )) )
     } ;
 
     render(){
