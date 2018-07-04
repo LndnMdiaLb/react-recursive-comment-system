@@ -1,4 +1,4 @@
-#React Recursive Comment System
+# React Recursive Comment System
 
 ![recursion](./readme/UI-Recursion.jpg)
 
@@ -15,7 +15,7 @@ React technologies in use:
 
 
 
-##The Process
+## The Process
 
 A composite data structure (in the form of an object) is generated from the flat server data structure.  This new data structure is a reflection of the nested structure the UI must output.  This new nested datastructure is used to recursively construct  **Container** components and populate them with properties
 
@@ -62,10 +62,10 @@ The reconfiguring of data is achieved with functions such as the link() in utili
 
 The 2 data structures are then used for specific purposes.  The original datastructure is stored in redux state.  While the new data structure is used in a recursive function to build the comment UI.
 
-##UI Logic
+## UI Logic
 ![ui-logic](./readme/UI-Logic.jpg)
 
-###Threads
+### Threads
 
 A component that utilises the extract utilities.js method to build the composite datastructure and then recursively build out as nested Container components.
 
@@ -91,7 +91,7 @@ then used as a **higher order component** / _curried_ function:
                 </div>
             ) ;
 
-###Container
+### Container
 
 A _recursive_ component that can create nested Containers and render them.  Nested post containers happen at 2 times in the app lifecycle. On **Mounting**, in which data from the server is used to reconstruct comment trees. And on **user interaction** (to reply / add a comment) .  The addition of new comments means that each Container needs to modify the list of nested Container components and as such needs to store Container data in state.
 
@@ -116,7 +116,7 @@ Comments (initially passed as props.children) are finally rendered from state, a
 
 Additionaly each Container is passed references to certain parent container methods so that adding ane removing nested containers can be implemented
 
-###Post
+### Post
 
 Subscribes to the redux store but makes no dispatches, it delegates all dispatches to parent (Container).
 This setup seems counter intuitive use of redux as it doesn't take advantage of the ability to not propagate properties.  Everything is connected
@@ -124,9 +124,9 @@ as Containers are recursively nested.
 
 It's main purpose is to retain a flat state shape on the redux end for easy transference to servers in bulk
 
-##UX Design
+## UX Design
 
-####Separating User Intent / Interaction
+#### Separating User Intent / Interaction
 
 ![ux-intent-state](./readme/UX-Intent-State.jpg)
 
