@@ -1,7 +1,8 @@
 import { headers, api } from '../utilities/network' ;
 
 import {
-    updatePostAction, deleteAction
+    userLoginAction, setPostsAction, setCategoriesAction,
+    createPostAction, updatePostAction, deleteAction
 } from './actions' ;
 
 
@@ -25,13 +26,58 @@ export const requestPosts=_=> ({
 
 export const successPosts=_=> ({
     type: SUCCESS_POSTS,
-    status:'idle'
+    status:'active'
 }) ;
 
 export const failurePosts=_=> ({
     type: FAILURE_POSTS,
     status:'error'
 }) ;
+
+
+/*
+
+    thunk action creator:
+
+*/
+
+
+export const requestRemotePostsAction=_=>
+    dispatch => {
+        dispatch( requestPosts() ) ;
+        return fetch(`${api}/posts` ,
+                    {   method: 'GET' ,
+                        headers })
+
+                        .then(data=>data.json())
+                        .then(  posts => {
+                                    dispatch(successPosts()) ;
+                                    return posts },
+                                error => {
+                                    dispatch(failurePosts()) ;
+                                    return error } )
+
+                        .then( posts=>dispatch( setPostsAction(posts) ) )
+                        };
+
+
+export const requestRemoteCategoriesAction=_=>
+    dispatch => {
+        dispatch( requestPosts() ) ;
+        return fetch(`${api}/categories` ,
+                    {   method: 'GET' ,
+                        headers })
+
+                        .then(data=>data.json())
+                        .then(  categories => {
+                                    dispatch(successPosts()) ;
+                                    return categories },
+                                error => {
+                                    dispatch(failurePosts()) ;
+                                    return error } )
+
+                        .then( categories=>dispatch( setCategoriesAction(categories) ) )
+                    };
 
 /*
 
@@ -47,8 +93,8 @@ export const failurePosts=_=> ({
             return Promise.resolve('done')
         }
 */
-
-export const createRemotePostAction= (id, parent, author, timestamp, title, body ) =>
+// id, parent, author, this.props.timestamp, title, body
+export const createRemotePostAction= (id, timestamp, title, body, parent, author  ) =>
   dispatch => {
     dispatch( requestPosts() ) ;
     return fetch( `${api}/posts`,
@@ -57,7 +103,7 @@ export const createRemotePostAction= (id, parent, author, timestamp, title, body
                 ...headers,
                 'Content-Type': 'application/json' } ,
             body: JSON.stringify(
-                { id, parent, author, timestamp, title, body } ) })
+                { id, timestamp, title, body, parent, author } ) })
 
                 .then(  data => {
                             dispatch(successPosts()) ;
@@ -65,9 +111,9 @@ export const createRemotePostAction= (id, parent, author, timestamp, title, body
                         error => {
                             dispatch(failurePosts()) ;
                             return error } )
-                    }
-
-
+                .then( _=>dispatch( updatePostAction(id, timestamp, title, body) ) )
+                .then( _=>updateRemotePostAction( id, timestamp, title, body ) )
+            }   ;
 
 
 export const updateRemotePostAction= ( id, timestamp, title, body ) =>
@@ -89,8 +135,7 @@ export const updateRemotePostAction= ( id, timestamp, title, body ) =>
                                 return error })
                     .then( res =>
                         dispatch( updatePostAction(id, timestamp, title, body) )
-                    )
-    }
+                    )   }   ;
 
 
 export const voteRemotePostAction= ( id, value ) =>
@@ -103,14 +148,12 @@ export const voteRemotePostAction= ( id, value ) =>
                     'Content-Type': 'application/json' } ,
                 body: JSON.stringify({option:value}) })
 
-                    .then(  data => {
-
+                    .then( data=> {
                         dispatch( successPosts() ) ;
                         return data } )
-                    .catch( error => {
+                    .catch( error=> {
                         dispatch( failurePosts() ) ;
-                        return error })
-    }
+                        return error }) }   ;
 
 
 export const deleteRemotePostAction= ( id ) =>
@@ -130,6 +173,5 @@ export const deleteRemotePostAction= ( id ) =>
                                 return error })
                     .then( res =>
                         dispatch( deleteAction(id) )
-                    )
-}
+                    )   }   ;
 
