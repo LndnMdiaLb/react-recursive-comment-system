@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { Control } from './Control' ;
 import { Button } from './post/Button' ;
+import { Bubbles } from './Bubbles' ;
 
 import {
     // USER_LOGIN, CREATE_POST, EDIT_POST, DELETE_POST, VOTE_POST,
@@ -189,6 +190,7 @@ class Container extends React.Component {
 
                         { root &&
                         <div className='top-nav'>
+                            <Bubbles />
                             <h1>welcome <i>{user}</i></h1>
                             <Button onClick={ this.createPost }> new post </Button>
                         </div> }

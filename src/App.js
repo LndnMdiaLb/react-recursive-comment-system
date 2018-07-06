@@ -13,6 +13,7 @@ import { reducer } from './redux/reducers';
 
 
 import {Thread} from './components/Threads' ;
+import {Bubbles} from './components/Bubbles' ;
 
 
 import './App.css';
@@ -38,22 +39,24 @@ const store= createStore(
                 // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
             )) ;
 
-
-const Spinner= _=><div className='spinner'></div> ;
+const Spinner= _=>
+    <div className='spinner'></div> ;
 
 
 class Login extends React.Component {
 
     state = { user: "anonymous" } ;
+    inputRef= React.createRef()
     constructor(props) { super(props) ; }
 
     update= ({target:{value:user}})=> this.setState(_=>({ user })) ;
+    clear=_=> this.inputRef.current.placeholder='';
 
     render=_=> {
         const { user }= this.state ;
         return (    <div className='login'>
-                        <span> log in as:</span>
-                        <input onChange={this.update}/>
+                        <Bubbles/>
+                        <input ref={this.inputRef} placeholder='enter username' onFocus={this.clear} onChange={this.update}/>
                         <Link to={ `/${user}` }>
                             <button> Login </button>
                         </Link>
