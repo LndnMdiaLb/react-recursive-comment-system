@@ -1,5 +1,7 @@
 # React Recursive Comment System
 
+[**see it in action**](http://recurse.us-east-2.elasticbeanstalk.com)
+
 To install and start the _API server_, run the following commands in this directory:
 
 * `cd api-server`
