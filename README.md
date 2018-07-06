@@ -1,5 +1,16 @@
 # React Recursive Comment System
 
+To install and start the _API server_, run the following commands in this directory:
+
+* `cd api-server`
+* `npm install`
+* `node server`
+
+To install and start the _React Environment_, run the following commands in this directory:
+
+* `npm install`
+* `npm start`
+
 ![recursion](./readme/UI-Recursion.jpg)
 
 A Flat / Normalised *posts* object is retrieved from the server, used as _hydated state_ in a **redux store**, then
