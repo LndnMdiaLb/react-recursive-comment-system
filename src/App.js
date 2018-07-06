@@ -105,6 +105,9 @@ class App extends Component {
                                         ? <Thread posts={ posts }/>
                                         : <Spinner  /> }  } />
                     </Switch>
+                    <a className='github' href='https://github.com/LndnMdiaLb/react-recursive-comment-system'>
+                        <GitHub />
+                    </a>
                 </main>
             </BrowserRouter>
         </Provider> ;

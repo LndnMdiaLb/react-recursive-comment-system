@@ -2,6 +2,7 @@ import React from 'react';
 import Container from './Container' ;
 
 import { extract } from '../utilities/utilities' ;
+import {GitHub} from './Bubbles' ;
 
 /*
     the children property refers to a property on the props object ( see: extract )

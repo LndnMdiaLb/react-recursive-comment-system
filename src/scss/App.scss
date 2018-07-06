@@ -42,15 +42,6 @@ html, body{
                 position: absolute;
                 width: 8em;
             }
-            a.github{
-                display: block;
-                position: absolute;
-                bottom: 0%;
-                #github-logo{
-                    position: relative;
-                    padding:0em 0em 1em 0em;
-                    width: 5em;
-                }}
             span{
                 color: #ffffff;
                 padding:.5em;
@@ -71,8 +62,26 @@ html, body{
             button{
                 width:6em;
             }
+            a.github{
+                display: block;
+                position: absolute;
+                bottom: 0%;
+                #github-logo{
+                    position: relative;
+                    padding:0em 0em 1em 0em;
+                    width: 5em;
+                }}
         }
     }
+    a.github{
+        padding: 2em;
+        display: block;
+        #github-logo{
+            display: block;
+            padding:0em 0em 1em 0em;
+            width: 5em;
+            margin: auto;
+        }}
     .wrapper {
         min-height: 100%;
         background-color: $color-a;

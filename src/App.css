@@ -29,14 +29,6 @@ html, body {
         padding: 0 1em 1em 2.5em;
         position: absolute;
         width: 8em; }
-      #root main .login a.github {
-        display: block;
-        position: absolute;
-        bottom: 0%; }
-        #root main .login a.github #github-logo {
-          position: relative;
-          padding: 0em 0em 1em 0em;
-          width: 5em; }
       #root main .login span {
         color: #ffffff;
         padding: .5em; }
@@ -53,6 +45,22 @@ html, body {
           color: #000000; }
       #root main .login button {
         width: 6em; }
+      #root main .login a.github {
+        display: block;
+        position: absolute;
+        bottom: 0%; }
+        #root main .login a.github #github-logo {
+          position: relative;
+          padding: 0em 0em 1em 0em;
+          width: 5em; }
+  #root a.github {
+    padding: 2em;
+    display: block; }
+    #root a.github #github-logo {
+      display: block;
+      padding: 0em 0em 1em 0em;
+      width: 5em;
+      margin: auto; }
   #root .wrapper {
     min-height: 100%;
     background-color: #d13024; }
