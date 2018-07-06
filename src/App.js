@@ -56,7 +56,11 @@ class Login extends React.Component {
         const { user }= this.state ;
         return (    <div className='login'>
                         <Bubbles />
-                        <input ref={this.inputRef} placeholder='enter username' onFocus={this.clear} onChange={this.update}/>
+                        <input
+                            ref={this.inputRef}
+                            placeholder='enter username'
+                            onFocus={ this.clear }
+                            onChange={ this.update } />
                         <Link to={ `/${user}` }>
                             <button> Login </button>
                         </Link>
@@ -102,8 +106,8 @@ class App extends Component {
                                     const {user:current, hydrated, posts} = this.state ;
                                     current !==user && store.dispatch( userLoginAction(user) ) ;
                                     return hydrated
-                                        ? <Thread posts={ posts }/>
-                                        : <Spinner  /> }  } />
+                                        ? <Thread posts={ store.getState().posts }/>
+                                        : <Spinner /> }  } />
                     </Switch>
                     <a className='github' href='https://github.com/LndnMdiaLb/react-recursive-comment-system'>
                         <GitHub />

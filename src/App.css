@@ -82,8 +82,8 @@ html, body {
         display: block;
         width: 8em;
         margin: auto;
-        padding: 0 1em 1em; }
-      #root .container .top-nav h1 {
+        padding: 1em 1em 2em; }
+      #root .container .top-nav .welcome {
         position: absolute;
         top: 0;
         right: 0;
@@ -91,6 +91,10 @@ html, body {
         padding: .5em .5em 2em;
         font-size: 1em;
         color: #ffffff; }
+        #root .container .top-nav .welcome a {
+          text-decoration: none; }
+        #root .container .top-nav .welcome button {
+          width: auto !important; }
       #root .container .top-nav button {
         display: block;
         width: 15em;

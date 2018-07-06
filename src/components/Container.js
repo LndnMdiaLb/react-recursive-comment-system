@@ -5,6 +5,8 @@ import { Control } from './Control' ;
 import { Button } from './post/Button' ;
 import { Bubbles } from './Bubbles' ;
 
+import { Link } from 'react-router-dom' ;
+
 import {
     // USER_LOGIN, CREATE_POST, EDIT_POST, DELETE_POST, VOTE_POST,
     userLoginAction, createPostAction, cancelPostAction, updatePostAction, deleteAction,
@@ -191,7 +193,13 @@ class Container extends React.Component {
                         { root &&
                         <div className='top-nav'>
                             <Bubbles />
-                            <h1>welcome <i>{user}</i></h1>
+                            <div className='welcome'>
+                                <h1>welcome <i>{user}</i></h1>
+                                <Link to='/'>
+                                    <button>switch user</button>
+                                </Link>
+                            </div>
+
                             <Button onClick={ this.createPost }> new post </Button>
                         </div> }
 
