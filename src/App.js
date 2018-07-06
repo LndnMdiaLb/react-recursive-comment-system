@@ -13,7 +13,7 @@ import { reducer } from './redux/reducers';
 
 
 import {Thread} from './components/Threads' ;
-import {Bubbles} from './components/Bubbles' ;
+import {Bubbles, GitHub} from './components/Bubbles' ;
 
 
 import './App.css';
@@ -55,11 +55,14 @@ class Login extends React.Component {
     render=_=> {
         const { user }= this.state ;
         return (    <div className='login'>
-                        <Bubbles/>
+                        <Bubbles />
                         <input ref={this.inputRef} placeholder='enter username' onFocus={this.clear} onChange={this.update}/>
                         <Link to={ `/${user}` }>
                             <button> Login </button>
                         </Link>
+                        <a className='github' href='https://github.com/LndnMdiaLb/react-recursive-comment-system'>
+                            <GitHub />
+                        </a>
                     </div>  ) } ;
     }
 
